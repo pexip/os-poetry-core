@@ -1,0 +1,2 @@
+# The testsuite requires python.h, so the dev package is needed
+source: build-depends-on-python-dev-with-no-arch-any

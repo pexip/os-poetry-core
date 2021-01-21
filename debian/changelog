@@ -1,0 +1,13 @@
+poetry-core (1.0.0-2) unstable; urgency=medium
+
+  * Team upload.
+  * Source-only upload. No changes.
+
+ -- Louis-Philippe Véronneau <pollo@debian.org>  Wed, 20 Jan 2021 22:11:57 -0500
+
+poetry-core (1.0.0-1) unstable; urgency=low
+
+  [ Emmanuel Arias ]
+  * Initial release (Closes: #977483)
+
+ -- Emmanuel Arias <eamanu@yaerobi.com>  Fri, 25 Dec 2020 17:52:58 -0500
