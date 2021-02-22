@@ -1,3 +1,9 @@
+poetry-core (1.0.0-2pexip1) pexip; urgency=medium
+
+  * Prepare Pexip packaging
+
+ -- Huw Jones <huw@pexip.com>  Mon, 22 Feb 2021 18:58:06 +0000
+
 poetry-core (1.0.0-2) unstable; urgency=medium
 
   * Team upload.
