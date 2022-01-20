@@ -3,6 +3,10 @@ import posixpath
 import re
 import sys
 
+from typing import TYPE_CHECKING
+from typing import Dict
+from typing import List
+from typing import Tuple
 from typing import Union
 
 from six.moves.urllib.parse import unquote  # noqa
@@ -24,6 +28,10 @@ from poetry.core.version.markers import MarkerUnion
 from poetry.core.version.markers import MultiMarker
 from poetry.core.version.markers import SingleMarker
 
+
+if TYPE_CHECKING:
+    from poetry.core.packages.constraints import BaseConstraint  # noqa
+    from poetry.core.semver import VersionTypes  # noqa
 
 BZ2_EXTENSIONS = (".tar.bz2", ".tbz")
 XZ_EXTENSIONS = (".tar.xz", ".txz", ".tlz", ".tar.lz", ".tar.lzma")
@@ -82,7 +90,7 @@ def url_to_path(url):  # type: (str) -> Path
     return Path(url2pathname(netloc + unquote(path)))
 
 
-def is_url(name):
+def is_url(name):  # type: (str) -> bool
     if ":" not in name:
         return False
     scheme = name.split(":", 1)[0].lower()
@@ -102,7 +110,7 @@ def is_url(name):
     ]
 
 
-def strip_extras(path):
+def strip_extras(path):  # type: (str) -> Tuple[str, str]
     m = re.match(r"^(.+)(\[[^\]]+\])$", path)
     extras = None
     if m:
@@ -114,7 +122,7 @@ def strip_extras(path):
     return path_no_extras, extras
 
 
-def is_installable_dir(path):
+def is_installable_dir(path):  # type: (str) -> bool
     """Return True if `path` is a directory containing a setup.py file."""
     if not os.path.isdir(path):
         return False
@@ -124,7 +132,7 @@ def is_installable_dir(path):
     return False
 
 
-def is_archive_file(name):
+def is_archive_file(name):  # type: (str) -> bool
     """Return True if `name` is a considered as an archive file."""
     ext = splitext(name)[1].lower()
     if ext in ARCHIVE_EXTENSIONS:
@@ -132,7 +140,7 @@ def is_archive_file(name):
     return False
 
 
-def splitext(path):
+def splitext(path):  # type: (str) -> Tuple[str, str]
     """Like os.path.splitext, but take off .tar too"""
     base, ext = posixpath.splitext(path)
     if base.lower().endswith(".tar"):
@@ -141,7 +149,9 @@ def splitext(path):
     return base, ext
 
 
-def group_markers(markers, or_=False):
+def group_markers(
+    markers, or_=False
+):  # type: (List[BaseMarker], bool) -> List[Union[Tuple[str, str, str], List[Tuple[str, str, str]]]]
     groups = [[]]
 
     for marker in markers:
@@ -160,12 +170,14 @@ def group_markers(markers, or_=False):
     return groups
 
 
-def convert_markers(marker):
+def convert_markers(marker):  # type: (BaseMarker) -> Dict[str, List[Tuple[str, str]]]
     groups = group_markers([marker])
 
     requirements = {}
 
-    def _group(_groups, or_=False):
+    def _group(
+        _groups, or_=False
+    ):  # type: (List[Union[Tuple[str, str, str], List[Tuple[str, str, str]]]], bool) -> None
         ors = {}
         for group in _groups:
             if isinstance(group, list):
@@ -197,7 +209,9 @@ def convert_markers(marker):
     return requirements
 
 
-def create_nested_marker(name, constraint):
+def create_nested_marker(
+    name, constraint
+):  # type: (str, Union["BaseConstraint", VersionUnion, Version, VersionConstraint]) -> str
     if constraint.is_any():
         return ""
 
@@ -230,6 +244,9 @@ def create_nested_marker(name, constraint):
 
         marker = glue.join(parts)
     elif isinstance(constraint, Version):
+        if name == "python_version" and constraint.precision >= 3:
+            name = "python_full_version"
+
         marker = '{} == "{}"'.format(name, constraint.text)
     else:
         if constraint.min is not None:
@@ -237,9 +254,16 @@ def create_nested_marker(name, constraint):
             if not constraint.include_min:
                 op = ">"
 
-            version = constraint.min.text
+            version = constraint.min
             if constraint.max is not None:
-                text = '{} {} "{}"'.format(name, op, version)
+                min_name = max_name = name
+                if min_name == "python_version" and constraint.min.precision >= 3:
+                    min_name = "python_full_version"
+
+                if max_name == "python_version" and constraint.max.precision >= 3:
+                    max_name = "python_full_version"
+
+                text = '{} {} "{}"'.format(min_name, op, version)
 
                 op = "<="
                 if not constraint.include_max:
@@ -247,7 +271,7 @@ def create_nested_marker(name, constraint):
 
                 version = constraint.max
 
-                text += ' and {} {} "{}"'.format(name, op, version)
+                text += ' and {} {} "{}"'.format(max_name, op, version)
 
                 return text
         elif constraint.max is not None:
@@ -259,14 +283,15 @@ def create_nested_marker(name, constraint):
         else:
             return ""
 
+        if name == "python_version" and version.precision >= 3:
+            name = "python_full_version"
+
         marker = '{} {} "{}"'.format(name, op, version)
 
     return marker
 
 
-def get_python_constraint_from_marker(
-    marker,
-):  # type: (BaseMarker) -> VersionConstraint
+def get_python_constraint_from_marker(marker,):  # type: (BaseMarker) -> "VersionTypes"
     python_marker = marker.only("python_version", "python_full_version")
     if python_marker.is_any():
         return VersionRange()

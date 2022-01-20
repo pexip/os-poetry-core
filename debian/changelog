@@ -1,3 +1,48 @@
+poetry-core (1.0.7-2~bpo11+1) bullseye-backports; urgency=medium
+
+  * Rebuild for bullseye-backports.
+
+ -- Stefano Rivera <stefanor@debian.org>  Wed, 19 Jan 2022 21:24:08 -0400
+
+poetry-core (1.0.7-2) unstable; urgency=medium
+
+  * d/tests/control: Add git to dependency for autopkgtest (Closes: #1000412).
+  * d/control: add nocheck profile for b-depends used in tests.
+  * d/copyright: remove a file that is not longer exist.
+  * d/upstream/metadata: remove unecessary whiteline.
+  * wrap-and-sort.
+
+ -- Emmanuel Arias <eamanu@yaerobi.com>  Tue, 23 Nov 2021 02:43:13 -0300
+
+poetry-core (1.0.7-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/control
+    - add git to b-d, needed by tests
+    - run wrap-and-sort
+    - bump Standards-Version to 4.6.0.1 (no changes needed)
+  * debian/patches/0001-Use-setup.py-from-Pypi.patch
+    - refresh setup.py (via poetry2setup)
+
+ -- Sandro Tosi <morph@debian.org>  Mon, 08 Nov 2021 22:58:14 -0500
+
+poetry-core (1.0.0-4) unstable; urgency=medium
+
+  * d/rules: Remove __init__.py package file to avoid that poetry
+    override this file.
+  * d/control: Add DPT as maintainer.
+    - Set me as uploaders.
+
+ -- Emmanuel Arias <eamanu@yaerobi.com>  Mon, 08 Nov 2021 00:31:59 -0300
+
+poetry-core (1.0.0-3) unstable; urgency=medium
+
+  [ Emmanuel Arias ]
+  * d/tests/control: add build-essentials package needed
+    for tests (Closes: #981533).
+
+ -- Sandro Tosi <morph@debian.org>  Tue, 11 May 2021 18:22:59 -0400
+
 poetry-core (1.0.0-2) unstable; urgency=medium
 
   * Team upload.

@@ -65,6 +65,21 @@ def test_build_wheel_with_include():
         )
 
 
+def test_build_wheel_with_bad_path_dev_dep_succeeds():
+    with temporary_directory() as tmp_dir, cwd(
+        os.path.join(fixtures, "with_bad_path_dev_dep")
+    ):
+        api.build_wheel(tmp_dir)
+
+
+def test_build_wheel_with_bad_path_dep_fails():
+    with pytest.raises(ValueError) as err, temporary_directory() as tmp_dir, cwd(
+        os.path.join(fixtures, "with_bad_path_dep")
+    ):
+        api.build_wheel(tmp_dir)
+    assert "does not exist" in str(err.value)
+
+
 @pytest.mark.skipif(
     sys.platform == "win32"
     and sys.version_info <= (3, 6)
@@ -101,6 +116,21 @@ def test_build_sdist_with_include():
         )
 
 
+def test_build_sdist_with_bad_path_dev_dep_succeeds():
+    with temporary_directory() as tmp_dir, cwd(
+        os.path.join(fixtures, "with_bad_path_dev_dep")
+    ):
+        api.build_sdist(tmp_dir)
+
+
+def test_build_sdist_with_bad_path_dep_fails():
+    with pytest.raises(ValueError) as err, temporary_directory() as tmp_dir, cwd(
+        os.path.join(fixtures, "with_bad_path_dep")
+    ):
+        api.build_sdist(tmp_dir)
+    assert "does not exist" in str(err.value)
+
+
 def test_prepare_metadata_for_build_wheel():
     entry_points = """\
 [console_scripts]
@@ -132,6 +162,7 @@ Maintainer-email: people@everywhere.com
 Requires-Python: >=3.6,<4.0
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.6
 Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
@@ -170,3 +201,18 @@ My Package
 
         with (dist_info / "METADATA").open(encoding="utf-8") as f:
             assert metadata == decode(f.read())
+
+
+def test_prepare_metadata_for_build_wheel_with_bad_path_dev_dep_succeeds():
+    with temporary_directory() as tmp_dir, cwd(
+        os.path.join(fixtures, "with_bad_path_dev_dep")
+    ):
+        api.prepare_metadata_for_build_wheel(tmp_dir)
+
+
+def test_prepare_metadata_for_build_wheel_with_bad_path_dep_succeeds():
+    with pytest.raises(ValueError) as err, temporary_directory() as tmp_dir, cwd(
+        os.path.join(fixtures, "with_bad_path_dep")
+    ):
+        api.prepare_metadata_for_build_wheel(tmp_dir)
+    assert "does not exist" in str(err.value)

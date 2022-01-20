@@ -28,10 +28,6 @@ Files: poetry/core/_vendor/pyparsing.py
 Copyright: 2003-2019  Paul T. McGuire
 License: MIT
 
-Files: poetry/core/_vendor/pyrsistent/LICENCE.mit
-Copyright: 2019 Tobias Gustafsson
-License: MIT
-
 Files: poetry/core/_vendor/pyrsistent/_toolz.py
 Copyright: 2013 Matthew Rocklin
 License: BSD-3-Clause
