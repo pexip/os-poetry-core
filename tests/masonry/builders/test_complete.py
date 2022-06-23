@@ -79,7 +79,7 @@ def test_wheel_c_extension():
 Wheel-Version: 1.0
 Generator: poetry {}
 Root-Is-Purelib: false
-Tag: cp[23]\\d-cp[23]\\dm?u?-.+
+Tag: cp[23]_?\\d+-cp[23]_?\\d+m?u?-.+
 $""".format(
                     __version__
                 ),
@@ -136,7 +136,7 @@ def test_wheel_c_extension_with_no_setup():
 Wheel-Version: 1.0
 Generator: poetry {}
 Root-Is-Purelib: false
-Tag: cp[23]\\d-cp[23]\\dm?u?-.+
+Tag: cp[23]_?\\d+-cp[23]_?\\d+m?u?-.+
 $""".format(
                     __version__
                 ),
@@ -193,7 +193,7 @@ def test_wheel_c_extension_src_layout():
 Wheel-Version: 1.0
 Generator: poetry {}
 Root-Is-Purelib: false
-Tag: cp[23]\\d-cp[23]\\dm?u?-.+
+Tag: cp[23]_?\\d+-cp[23]_?\\d+m?u?-.+
 $""".format(
                     __version__
                 ),
@@ -269,6 +269,7 @@ Maintainer-email: people@everywhere.com
 Requires-Python: >=3.6,<4.0
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.6
 Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
@@ -372,6 +373,7 @@ Maintainer-email: people@everywhere.com
 Requires-Python: >=3.6,<4.0
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.6
 Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
