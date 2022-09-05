@@ -1,3 +1,9 @@
+poetry-core (1.0.7-2~bpo11+1pexip3) pexip-bullseye; urgency=medium
+
+  * Bullseye rebuild for ARM64 inclusion
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Mon, 05 Sep 2022 10:35:01 +0100
+
 poetry-core (1.0.7-2~bpo11+1pexip2) pexip-bullseye; urgency=medium
 
   * Main bullseye build
