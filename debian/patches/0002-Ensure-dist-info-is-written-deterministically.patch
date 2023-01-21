@@ -1,0 +1,37 @@
+From e368e7a9e6de7e91b68c9b2b4722bc0e78ba6cf6 Mon Sep 17 00:00:00 2001
+From: Richard Purdie <richard.purdie@linuxfoundation.org>
+Date: Fri, 23 Dec 2022 11:04:36 +0000
+Subject: [PATCH 1/2] builders/wheel: Ensure dist-info is written
+ determinisically
+
+glob() returns values in "on disk" order. To make the RECORD file
+deterministic and consistent between builds we need to sort the
+data before adding to the records list.
+
+Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
+---
+ src/poetry/core/masonry/builders/wheel.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: poetry-core/src/poetry/core/masonry/builders/wheel.py
+===================================================================
+--- poetry-core.orig/src/poetry/core/masonry/builders/wheel.py	2023-01-21 19:43:35.287152582 -0300
++++ poetry-core/src/poetry/core/masonry/builders/wheel.py	2023-01-21 19:43:35.283152525 -0300
+@@ -190,7 +190,7 @@
+ 
+                     lib = libs[0]
+ 
+-                    for pkg in lib.glob("**/*"):
++                    for pkg in sorted(lib.glob("**/*")):
+                         if pkg.is_dir() or self.is_excluded(pkg):
+                             continue
+ 
+@@ -294,7 +294,7 @@
+ 
+     def _copy_dist_info(self, wheel: zipfile.ZipFile, source: Path) -> None:
+         dist_info = Path(self.dist_info)
+-        for file in source.glob("**/*"):
++        for file in sorted(source.glob("**/*")):
+             if not file.is_file():
+                 continue
+ 
