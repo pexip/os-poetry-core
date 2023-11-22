@@ -20,7 +20,7 @@ Vcs-Git: https://salsa.debian.org/python-team/packages/poetry-core.git
 Vcs-Browser: https://salsa.debian.org/python-team/packages/poetry-core
 Rules-Requires-Root: no
 Testsuite: autopkgtest-pkg-python
-XS-Pexip-Upstream: http://ftp.debian.org/debian/ bullseye-backports
+XS-Pexip-Upstream: http://ftp.debian.org/debian/ bookworm
 
 Package: python3-poetry-core
 Architecture: all
