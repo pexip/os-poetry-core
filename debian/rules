@@ -1,15 +1,14 @@
 #! /usr/bin/make -f
 
 export PYBUILD_NAME=poetry-core
+export PYBUILD_TEST_PYTEST=1
 export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
-# DESTDIR export variable is used hereunder in execute_after_dh_auto_install
-export DESTDIR=$(CURDIR)/debian/python3-poetry-core
-PYVERS := $(shell py3versions -sv)
-
+# ignore tests that read the source pyproject.toml file
+export PYBUILD_TEST_ARGS=-k 'not test_version_is_synced'
 
 %:
-	dh $@ --with python3 --buildsystem=pybuild --test=pytest
+	dh $@ --with python3 --buildsystem=pybuild
 
 override_dh_auto_install:
 	dh_auto_install
@@ -19,14 +18,3 @@ override_dh_auto_install:
 	find debian -type f -name "*COPYING*" -delete
 	# this is from tests
 	find . -name "*extended*" -type d -exec rm  -rf {} +
-
-
-execute_after_dh_install:
-	# During the package the of poetry, and piuparts error occur,
-	# because poetry.core is a module of poetry and both try to
-	# install poetry/__init__.py in the same path. As poetry.core
-	# is not expected to be installed alone, we adopt to remove
-	# __init__.py file from poetry.core package.
-	set -e ; for pyver in $(PYVERS); do \
-		rm $(DESTDIR)/usr/lib/python$$pyver/dist-packages/poetry/__init__.py ;\
-	done
